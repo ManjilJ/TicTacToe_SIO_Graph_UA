@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TicTacToe_SIO - Complete Architecture Graphs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .header {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .tabs {
+            max-width: 1400px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .tab-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            padding: 30px;
+            min-height: 500px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+        }
+        
+        .mermaid {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .diagram-section {
+            margin-bottom: 40px;
+        }
+        
+        .description {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 2px solid #999;
+        }
+        
+        .list-item {
+            margin: 10px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .list-item:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 TicTacToe_SIO - Complete Architecture Graphs</h1>
+        <p>Interactive visualizations of the full-stack multiplayer Tic-Tac-Toe application architecture</p>
+    </div>
+    
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('architecture')">📐 Architecture Layers</button>
+        <button class="tab-btn" onclick="showTab('components')">🔧 Component Dependencies</button>
+        <button class="tab-btn" onclick="showTab('dataflow')">📊 Data Flow</button>
+        <button class="tab-btn" onclick="showTab('realtime')">⚡ Real-Time Events</button>
+        <button class="tab-btn" onclick="showTab('auth')">🔐 Authentication Flow</button>
+        <button class="tab-btn" onclick="showTab('game')">🎯 Game Logic Flow</button>
+    </div>
+    
+    <div class="container">
+        <!-- Architecture Layers -->
+        <div id="architecture" class="tab-content active">
+            <h2>📐 Six-Layer Architecture</h2>
+            
+            <div class="description">
+                The TicTacToe_SIO follows a layered architecture with clear separation of concerns. Each layer has specific responsibilities and communicates through well-defined interfaces.
+            </div>
+            
+            <div class="mermaid">
+                graph TD
+                    A["🖥️ PRESENTATION LAYER<br/>React Components<br/>App.js, Auth.js, TicTacToe.js"] --> B["💼 APPLICATION LAYER<br/>Client-Side Business Logic<br/>State Management, Validation"]
+                    B --> C["🌐 API GATEWAY & REAL-TIME<br/>Express + Socket.IO<br/>REST Endpoints, WebSocket"]
+                    C --> D["🎮 GAME SERVICE LAYER<br/>Game State, Player Management<br/>Move Validation, Broadcasting"]
+                    D --> E["💾 DATA PERSISTENCE<br/>SQLite3 Database<br/>Users Table"]
+                    F["🔐 SECURITY LAYER<br/>JWT, bcryptjs, CORS<br/>Authentication & Authorization"] -.-> C
+                    F -.-> E
+                    
+                    style A fill:#e8ebf8,stroke:#667eea,stroke-width:2px
+                    style B fill:#e8ebf8,stroke:#667eea,stroke-width:2px
+                    style C fill:#f0e8ff,stroke:#764ba2,stroke-width:2px
+                    style D fill:#f0e8ff,stroke:#764ba2,stroke-width:2px
+                    style E fill:#ffe8e8,stroke:#c95555,stroke-width:2px
+                    style F fill:#e8ffe8,stroke:#55aa55,stroke-width:2px
+            </div>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8ebf8;"></div>
+                    <span>Frontend Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f0e8ff;"></div>
+                    <span>Backend Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ffe8e8;"></div>
+                    <span>Database Layer</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #e8ffe8;"></div>
+                    <span>Security Layer</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Component Dependencies -->
+        <div id="components" class="tab-content">
+            <h2>🔧 Component Dependency Graph</h2>
+            
+            <div class="description">
+                Shows how React components and backend modules depend on each other. Arrows indicate import/require relationships.
+            </div>
+            
+            <div class="mermaid">
+                graph TD
+                    INDEX["📄 index.js<br/>React Entry Point"]
+                    APP["⚛️ App.js<br/>Root Router"]
+                    AUTH["🔐 Auth.js<br/>Login/Register"]
+                    GAME["🎮 TicTacToe.js<br/>Game Board & Logic"]
+                    
+                    SERVER["🖥️ server.js<br/>Express + Socket.IO"]
+                    DB["💾 SQLite3<br/>Users Table"]
+                    
+                    AXIOS["📡 axios"]
+                    SOCKET["⚡ socket.io-client"]
+                    JWT["🔑 jsonwebtoken"]
+                    BCRYPT["🔒 bcryptjs"]
+                    
+                    INDEX --> APP
+                    APP --> AUTH
+                    APP --> GAME
+                    
+                    AUTH --> AXIOS
+                    GAME --> AXIOS
+                    GAME --> SOCKET
+                    
+                    SOCKET --> SERVER
+                    AXIOS --> SERVER
+                    
+                    SERVER --> JWT
+                    SERVER --> BCRYPT
+                    SERVER --> DB
+                    
+                    style INDEX fill:#e8ebf8
+                    style APP fill:#e8ebf8
+                    style AUTH fill:#e8ebf8
+                    style GAME fill:#e8ebf8
+                    style SERVER fill:#f0e8ff
+                    style DB fill:#ffe8e8
+                    style AXIOS fill:#fff8e8
+                    style SOCKET fill:#fff8e8
+                    style JWT fill:#e8ffe8
+                    style BCRYPT fill:#e8ffe8
+            </div>
+        </div>
+        
+        <!-- Data Flow -->
+        <div id="dataflow" class="tab-content">
+            <h2>📊 Request/Response Data Flow</h2>
+            
+            <div class="description">
+                How data moves through the system during authentication, gameplay, and real-time updates.
+            </div>
+            
+            <div class="mermaid">
+                sequenceDiagram
+                    participant User as 👤 User<br/>Browser
+                    participant Frontend as ⚛️ Frontend<br/>React
+                    participant Backend as 🖥️ Backend<br/>Express
+                    participant DB as 💾 Database<br/>SQLite3
+                    
+                    Note over User,DB: Authentication Flow
+                    User->>Frontend: Enter username/password
+                    Frontend->>Backend: POST /login (Axios)
+                    Backend->>DB: SELECT user WHERE username
+                    DB-->>Backend: User record
+                    Backend->>Backend: bcrypt.compare()
+                    Backend->>Backend: jwt.sign() token
+                    Backend-->>Frontend: JWT token
+                    Frontend->>Frontend: localStorage.setItem(token)
+                    Frontend-->>User: ✅ Login Success
+                    
+                    Note over User,DB: Game Session Flow
+                    User->>Frontend: Click board cell
+                    Frontend->>Backend: socket.emit('move')
+                    Backend->>Backend: Validate move & turn
+                    Backend->>Backend: Check winner
+                    Backend->>DB: UPDATE wins (if won)
+                    Backend->>Backend: io.emit('update') broadcast
+                    Backend-->>Frontend: New board state
+                    Frontend->>Frontend: Update React state
+                    Frontend-->>User: ✅ Board updates
+            </div>
+        </div>
+        
+        <!-- Real-Time Events -->
+        <div id="realtime" class="tab-content">
+            <h2>⚡ Socket.IO Real-Time Events</h2>
+            
+            <div class="description">
+                WebSocket events that synchronize game state in real-time between server and all connected clients.
+            </div>
+            
+            <div class="mermaid">
+                graph LR
+                    CLIENT["👤 Client 1<br/>TicTacToe.js"]
+                    SERVER["🖥️ Server<br/>Game Engine"]
+                    CLIENT2["👤 Client 2<br/>TicTacToe.js"]
+                    
+                    CLIENT -->|socket.emit<br/>move, reset<br/>chat, joinGame| SERVER
+                    CLIENT -->|socket.emit<br/>quitGame| SERVER
+                    
+                    SERVER -->|io.emit broadcast<br/>update, reset<br/>chat| CLIENT
+                    SERVER -->|io.emit broadcast<br/>update, reset<br/>chat| CLIENT2
+                    SERVER -->|socket.emit<br/>init, idleTimeout| CLIENT
+                    
+                    SERVER -->|Every 25 seconds<br/>Check inactivity| SERVER
+                    SERVER -->|90 min no moves<br/>idleTimeout event| CLIENT
+                    
+                    style CLIENT fill:#e8ebf8
+                    style CLIENT2 fill:#e8ebf8
+                    style SERVER fill:#f0e8ff
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #333;">Socket.IO Events Reference</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Direction</th>
+                        <th>Purpose</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>move</strong></td>
+                        <td>Client → Server</td>
+                        <td>Player plays a move</td>
+                        <td>{ index: 0-8 }</td>
+                    </tr>
+                    <tr>
+                        <td><strong>update</strong></td>
+                        <td>Server → All Clients</td>
+                        <td>Board state changed</td>
+                        <td>gameObject</td>
+                    </tr>
+                    <tr>
+                        <td><strong>reset</strong></td>
+                        <td>Bidirectional</td>
+                        <td>Reset game, swap roles</td>
+                        <td>gameObject</td>
+                    </tr>
+                    <tr>
+                        <td><strong>chat</strong></td>
+                        <td>Bidirectional</td>
+                        <td>Send/receive messages</td>
+                        <td>{ sender, text }</td>
+                    </tr>
+                    <tr>
+                        <td><strong>joinGame</strong></td>
+                        <td>Client → Server</td>
+                        <td>Spectator joins as player</td>
+                        <td>{}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>quitGame</strong></td>
+                        <td>Client → Server</td>
+                        <td>Player becomes spectator</td>
+                        <td>{}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>idleTimeout</strong></td>
+                        <td>Server → Client</td>
+                        <td>Inactivity warning</td>
+                        <td>{}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>init</strong></td>
+                        <td>Server → Client</td>
+                        <td>Initial connection setup</td>
+                        <td>{ state, role }</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Authentication Flow -->
+        <div id="auth" class="tab-content">
+            <h2>🔐 Authentication & Security Flow</h2>
+            
+            <div class="description">
+                Complete authentication flow from registration through token validation on every request.
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Registration & Login Process</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Action</th>
+                        <th>Component</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>User enters credentials</td>
+                        <td>Auth.js Form</td>
+                        <td>Username & password input</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Submit form</td>
+                        <td>handleSubmit()</td>
+                        <td>POST /register or /login</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Server receives request</td>
+                        <td>Express Endpoint</td>
+                        <td>Validate username & password</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4A</strong></td>
+                        <td>New user registration</td>
+                        <td>bcryptjs</td>
+                        <td>Hash password with 10 salt rounds</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4B</strong></td>
+                        <td>Existing user login</td>
+                        <td>bcryptjs</td>
+                        <td>Compare input with stored hash</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Save or verify</td>
+                        <td>SQLite3</td>
+                        <td>INSERT new user or verify match</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Generate JWT token</td>
+                        <td>jsonwebtoken</td>
+                        <td>7-day expiry, sign with JWT_SECRET</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Send token to client</td>
+                        <td>HTTP Response</td>
+                        <td>JSON: { token, username }</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8</strong></td>
+                        <td>Store token locally</td>
+                        <td>App.js</td>
+                        <td>localStorage.setItem("token")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>Add to requests</td>
+                        <td>Axios headers</td>
+                        <td>Authorization: Bearer TOKEN</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Socket connection</td>
+                        <td>Socket.IO auth</td>
+                        <td>Verify JWT in io.use middleware</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Connected & authenticated</td>
+                        <td>TicTacToe.js</td>
+                        <td>Ready to play game</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 30px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Security Mechanisms</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Security Layer</th>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                        <th>Implementation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Password Hashing</strong></td>
+                        <td>bcryptjs</td>
+                        <td>Secure password storage</td>
+                        <td>10 salt rounds, one-way hash</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Token Generation</strong></td>
+                        <td>jsonwebtoken</td>
+                        <td>Stateless authentication</td>
+                        <td>JWT signed with JWT_SECRET</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Token Expiry</strong></td>
+                        <td>JWT config</td>
+                        <td>Time-limited access</td>
+                        <td>7 days validity period</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CORS</strong></td>
+                        <td>Express CORS</td>
+                        <td>Prevent cross-origin attacks</td>
+                        <td>Whitelist allowed origins</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Socket Auth</strong></td>
+                        <td>Socket.IO middleware</td>
+                        <td>Secure WebSocket connections</td>
+                        <td>Verify JWT before connection</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Game Logic Flow -->
+        <div id="game" class="tab-content">
+            <h2>🎯 Game Logic & Move Processing</h2>
+            
+            <div class="description">
+                Step-by-step flow of how a move is validated, processed, and synchronized across all players.
+            </div>
+            
+            <h3 style="margin-top: 30px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Move Processing Steps</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Action</th>
+                        <th>Location</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1</strong></td>
+                        <td>User clicks board cell</td>
+                        <td>TicTacToe.js UI</td>
+                        <td>Click handler on cell button</td>
+                    </tr>
+                    <tr>
+                        <td><strong>2</strong></td>
+                        <td>Emit move event</td>
+                        <td>Socket.IO Client</td>
+                        <td>socket.emit('move', {index})</td>
+                    </tr>
+                    <tr>
+                        <td><strong>3</strong></td>
+                        <td>Server receives move</td>
+                        <td>server.js handler</td>
+                        <td>socket.on('move') triggered</td>
+                    </tr>
+                    <tr>
+                        <td><strong>4</strong></td>
+                        <td>Validate move</td>
+                        <td>Game Service</td>
+                        <td>Check: cell empty, player's turn, game not won</td>
+                    </tr>
+                    <tr>
+                        <td><strong>5</strong></td>
+                        <td>Update board</td>
+                        <td>gameObject</td>
+                        <td>board[index] = 'X' or 'O'</td>
+                    </tr>
+                    <tr>
+                        <td><strong>6</strong></td>
+                        <td>Toggle turn</td>
+                        <td>gameObject</td>
+                        <td>isXNext = !isXNext</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>Check winner</td>
+                        <td>checkWinner()</td>
+                        <td>Check 8 winning patterns (rows/cols/diags)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8A</strong></td>
+                        <td>If winner found</td>
+                        <td>Database</td>
+                        <td>UPDATE users SET wins = wins + 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>8B</strong></td>
+                        <td>If draw detected</td>
+                        <td>gameObject</td>
+                        <td>winner = 'Draw'</td>
+                    </tr>
+                    <tr>
+                        <td><strong>9</strong></td>
+                        <td>Broadcast update</td>
+                        <td>Socket.IO Server</td>
+                        <td>io.emit('update', gameObject) to all clients</td>
+                    </tr>
+                    <tr>
+                        <td><strong>10</strong></td>
+                        <td>Clients update state</td>
+                        <td>TicTacToe.js</td>
+                        <td>React state: setBoard, setWinner, setWhoseTurn</td>
+                    </tr>
+                    <tr>
+                        <td><strong>11</strong></td>
+                        <td>Render animations</td>
+                        <td>React component</td>
+                        <td>Cell zoom, winning line draw</td>
+                    </tr>
+                    <tr>
+                        <td><strong>12</strong></td>
+                        <td>Move complete</td>
+                        <td>All clients</td>
+                        <td>Board updated, visible to all players</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 30px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Player Roles & Game States</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Role</th>
+                        <th>Permissions</th>
+                        <th>Can Play</th>
+                        <th>Can Chat</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Player 1</strong></td>
+                        <td>Place X marks</td>
+                        <td>Yes (odd turns)</td>
+                        <td>Yes</td>
+                        <td>First active player, plays X symbols</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Player 2</strong></td>
+                        <td>Place O marks</td>
+                        <td>Yes (even turns)</td>
+                        <td>Yes</td>
+                        <td>Second active player, plays O symbols</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spectator</strong></td>
+                        <td>Watch only</td>
+                        <td>No</td>
+                        <td>Yes</td>
+                        <td>Observer, can join if slot available</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3 style="margin-top: 30px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">Game Win Patterns (8 Winning Lines)</h3>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                    <div>
+                        <strong style="color: #667eea;">Rows:</strong>
+                        <div class="list-item">Cells 0, 1, 2</div>
+                        <div class="list-item">Cells 3, 4, 5</div>
+                        <div class="list-item">Cells 6, 7, 8</div>
+                    </div>
+                    <div>
+                        <strong style="color: #667eea;">Columns:</strong>
+                        <div class="list-item">Cells 0, 3, 6</div>
+                        <div class="list-item">Cells 1, 4, 7</div>
+                        <div class="list-item">Cells 2, 5, 8</div>
+                    </div>
+                    <div>
+                        <strong style="color: #667eea;">Diagonals:</strong>
+                        <div class="list-item">Cells 0, 4, 8</div>
+                        <div class="list-item">Cells 2, 4, 6</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'base', securityLevel: 'loose' });
+        
+        function showTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+            
+            // Re-render Mermaid diagrams
+            mermaid.contentLoaded();
+        }
+    </script>
+    <script src="./graph.min.js"></script>
+</body>
+</html>
